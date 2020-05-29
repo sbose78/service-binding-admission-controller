@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook-server
+  namespace: service-binding-webhook
+  labels:
+    app: webhook-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhook-server
+  template:
+    metadata:
+      labels:
+        app: webhook-server
+    spec:
+      containers:
+      - name: server
+        image: quay.io/shbose/service-binding-admission-controller:v0.2
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8443
+          name: webhook-api
+        volumeMounts:
+        - name: webhook-tls-certs
+          mountPath: /run/secrets/tls
+          readOnly: true
+      volumes:
+      - name: webhook-tls-certs
+        secret:
+          secretName: webhook-server-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webhook-server
+  namespace: service-binding-webhook
+spec:
+  selector:
+    app: webhook-server
+  ports:
+    - port: 443
+      targetPort: webhook-api
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: sbr-webhook
+webhooks:
+  - name: webhook-server.service-binding-webhook.svc
+    clientConfig:
+      service:
+        name: webhook-server
+        namespace: service-binding-webhook
+        path: "/validate"
+      caBundle: ${CA_PEM_B64}
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: ["apps.openshift.io"]
+        apiVersions: ["v1alpha1"]
+        resources: ["servicebindingrequests"]

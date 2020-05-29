@@ -1,0 +1,17 @@
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: sbr-webhook
+webhooks:
+  - name: webhook-server.service-binding-webhook.svc
+    clientConfig:
+      service:
+        name: webhook-server
+        namespace: service-binding-webhook
+        path: "/validate"
+      caBundle: ${CA_PEM_B64}
+    rules:
+      - operations: [ "CREATE" ]
+        apiGroups: ["apps.openshift.io"]
+        apiVersions: ["v1alpha1"]
+        resources: ["servicebindingrequests"]
