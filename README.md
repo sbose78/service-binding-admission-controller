@@ -1,6 +1,6 @@
 # Validating Admission Webhook for Service Binding
 
-An validating admission controller which validates `ServiceBindingRequests` before they are created on the cluster.
+A validating admission controller which validates `ServiceBindingRequests` before they are created on the cluster.
 
 At the moment, this webhook rejects every `ServiceBindingRequest`. Work is in progress to selectively reject `ServiceBindingRequests` if the user doesn't have the relevant permissions.
 
