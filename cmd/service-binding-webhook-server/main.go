@@ -44,7 +44,6 @@ func validateServiceBindingRequest() http.Handler {
 			log.Printf("Could not deserialize: %v", err)
 			w.WriteHeader(http.StatusBadRequest)
 			return
-			//return nil, fmt.Errorf("could not deserialize request: %v", err)
 		} else if admissionReviewReq.Request == nil {
 			log.Printf("Could not find request: %v", err)
 			w.WriteHeader(http.StatusBadRequest)
