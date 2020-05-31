@@ -84,6 +84,7 @@ func validateServiceBindingRequest() http.Handler {
 		if writeErr != nil {
 			log.Printf("Could not write response: %v", writeErr)
 		}
+		w.WriteHeader(http.StatusOK)
 	})
 }
 
