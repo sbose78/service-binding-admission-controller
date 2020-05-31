@@ -68,7 +68,7 @@ func validateServiceBindingRequest() http.Handler {
 		admissionReviewResponse := v1beta1.AdmissionReview{
 			Response: &v1beta1.AdmissionResponse{
 				UID:     admissionReviewReq.Request.UID,
-				Allowed: false, // REJECTING EVERYTHING NOW!
+				Allowed: true, // REJECTING EVERYTHING NOW!
 				Result: &metav1.Status{
 					Message: fmt.Sprintf("ServiceBinding is being created by user %s", admissionReviewReq.Request.UserInfo.Username),
 				},
