@@ -4,7 +4,7 @@ A simple admission webhook which rejects every `ServiceBindingRequest`
 
 ## Deploying it!
 
-1. Run `make` to build the image. Run `make push` to push it your registry. By default, a pre-built image `quay.io/shbose/service-binding-admission-controller:v0.2` will be used. 
+1. Run `make` to build the image. Run `make push` to push it your registry. By default, a pre-built image `quay.io/shbose/service-binding-admission-controller:v0.0.2` will be used. 
 
 2. Run `./deploy.sh`. This will create a CA, a certificate and private key for the webhook server,
 and deploy the resources in the newly created `service-binding-webhook` namespace in your Kubernetes cluster.
