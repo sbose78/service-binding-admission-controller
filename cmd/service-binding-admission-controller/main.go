@@ -68,7 +68,7 @@ func validateServiceBindingRequest() http.Handler {
 		admissionReviewResponse := v1beta1.AdmissionReview{
 			Response: &v1beta1.AdmissionResponse{
 				UID:     admissionReviewReq.Request.UID,
-				Allowed: true, // REJECTING EVERYTHING NOW!
+				Allowed: false, // REJECTING EVERYTHING NOW!
 				Result: &metav1.Status{
 					Message: fmt.Sprintf("ServiceBinding is being created by user %s", admissionReviewReq.Request.UserInfo.Username),
 				},
@@ -78,11 +78,15 @@ func validateServiceBindingRequest() http.Handler {
 		bytes, err := json.Marshal(&admissionReviewResponse)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			log.Printf("marshaling response: %v", err)
+			log.Printf("Error marshaling response: %v", err)
+			// TODO: free memory?
+			return
 		}
 		_, writeErr := w.Write(bytes)
 		if writeErr != nil {
 			log.Printf("Could not write response: %v", writeErr)
+			// TODO: free memory?
+			return
 		}
 		w.WriteHeader(http.StatusOK)
 	})

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: quay.io/shbose/service-binding-admission-controller:v0.2
+        image: quay.io/shbose/service-binding-admission-controller:79facd1
         imagePullPolicy: Always
         ports:
         - containerPort: 8443
