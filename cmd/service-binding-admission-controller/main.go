@@ -78,12 +78,17 @@ func validateServiceBindingRequest() http.Handler {
 		bytes, err := json.Marshal(&admissionReviewResponse)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
-			log.Printf("marshaling response: %v", err)
+			log.Printf("Error marshaling response: %v", err)
+			// TODO: free memory?
+			return
 		}
 		_, writeErr := w.Write(bytes)
 		if writeErr != nil {
 			log.Printf("Could not write response: %v", writeErr)
+			// TODO: free memory?
+			return
 		}
+		w.WriteHeader(http.StatusOK)
 	})
 }
 

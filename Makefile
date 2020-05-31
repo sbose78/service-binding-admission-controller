@@ -1,13 +1,14 @@
 .DEFAULT_GOAL := build
 
-IMAGE ?= quay.io/shbose/service-binding-admission-controller:v0.2
-
-bin/webhook-server: $(shell find . -name '*.go')
-	CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o $@ ./cmd/service-binding-webhook-server
+IMAGE ?= quay.io/shbose/service-binding-admission-controller:local
 
 .PHONY: build
-build: bin/webhook-server
-	docker build -t $(IMAGE) --file image/Dockerfile bin/
+bin/service-binding-webhook-server: $(shell find . -name '*.go')
+	CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o $@ ./cmd/service-binding-admission-controller
+
+.PHONY: build-image
+build-image: build
+	docker build -t $(IMAGE) --file Dockerfile .
 
 .PHONY: push
 push: build
